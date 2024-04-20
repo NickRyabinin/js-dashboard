@@ -1,7 +1,7 @@
 .bg-dark {
   background-color: rgb(61, 61, 57);
   width: 98vw;
-  min-height: 100vh;
+  height: 100%;
 }
 
 .bg-blue {
@@ -15,14 +15,31 @@
 .container {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 100px;
   flex-wrap: wrap;
-  min-height: 100vh;
+  height: 100%;
+  margin:10vh 0;
 }
 
 .card {
   width: 400px;
-  height: 600px;
-  margin: auto 0;
+  min-height: 600px;
+  border-radius: 10px;
+}
+
+form {
+  margin: 20px;
+}
+
+.input {
+  width: 235px;
+  height: 30px;
+  background-color: aquamarine;
+}
+
+.submit {
+  width: 120px;
+  height: 30px;
+  background-color: aquamarine;
 }
