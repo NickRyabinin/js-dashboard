@@ -37,5 +37,44 @@ function fetchDataWithFetch() {
     });
 }
 
-setInterval(fetchDataWithXHR, 120000);
-setInterval(fetchDataWithFetch, 120000);
+setInterval(fetchDataWithXHR, 50000);
+setInterval(fetchDataWithFetch, 50000);
+
+const apiKey = 'secret';
+
+// forward geocoding example (address to coordinate)
+// note: query needs to be URI encoded (see below)
+const query = 'Ельники';
+const apiUrl = 'https://api.opencagedata.com/geocode/v1/json';
+
+const requestUrl = apiUrl
+  + '?'
+  + 'key=' + apiKey
+  + '&q=' + encodeURIComponent(query)
+  + '&pretty=1';
+
+const request = new XMLHttpRequest();
+request.open('GET', requestUrl, true);
+
+request.onload = function() {
+
+  if (request.status === 200){
+    const data = JSON.parse(request.responseText);
+    alert("Latitude: " + data.results[0].geometry.lat + "\nLongitude: " +
+      data.results[0].geometry.lng + "\nTimezone: " +
+      data.results[0].annotations.timezone.name);
+
+  } else if (request.status <= 500){
+    console.log("unable to geocode! Response code: " + request.status);
+    const data = JSON.parse(request.responseText);
+    console.log('error msg: ' + data.status.message);
+  } else {
+    console.log("server error");
+  }
+};
+
+request.onerror = function() {
+  console.log("unable to connect to server");
+};
+
+request.send();
