@@ -1,9 +1,8 @@
 const locationLat = 54.625;
 const locationLon = 43.875;
-const locationTimezone = "Europe/Moscow";
 
 const url = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
-  locationLon + "&current=temperature_2m&timezone=" + locationTimezone;
+  locationLon + "&current=temperature_2m&timezone=auto";
 
 function fetchDataWithXHR() {
   const xhr = new XMLHttpRequest();
@@ -40,41 +39,33 @@ function fetchDataWithFetch() {
 setInterval(fetchDataWithXHR, 50000);
 setInterval(fetchDataWithFetch, 50000);
 
-const apiKey = 'secret';
-
-// forward geocoding example (address to coordinate)
-// note: query needs to be URI encoded (see below)
 const query = 'Ельники';
-const apiUrl = 'https://api.opencagedata.com/geocode/v1/json';
-
+const apiUrl = 'https://nominatim.openstreetmap.org/search';
 const requestUrl = apiUrl
   + '?'
-  + 'key=' + apiKey
-  + '&q=' + encodeURIComponent(query)
-  + '&pretty=1';
+  + 'q=' + encodeURIComponent(query)
+  + '&format=json';
 
-const request = new XMLHttpRequest();
-request.open('GET', requestUrl, true);
+getCoordinates();
 
-request.onload = function() {
-
-  if (request.status === 200){
-    const data = JSON.parse(request.responseText);
-    alert("Latitude: " + data.results[0].geometry.lat + "\nLongitude: " +
-      data.results[0].geometry.lng + "\nTimezone: " +
-      data.results[0].annotations.timezone.name);
-
-  } else if (request.status <= 500){
-    console.log("unable to geocode! Response code: " + request.status);
-    const data = JSON.parse(request.responseText);
-    console.log('error msg: ' + data.status.message);
-  } else {
-    console.log("server error");
-  }
-};
-
-request.onerror = function() {
-  console.log("unable to connect to server");
-};
-
-request.send();
+function getCoordinates() {
+  const request = new XMLHttpRequest();
+  request.open('GET', requestUrl, true);
+  request.onload = function() {
+    if (request.status === 200){
+      const data = JSON.parse(request.responseText);
+      alert("Latitude: " + data[0].lat + "\nLongitude: " +
+        data[0].lon + "\nPlace: " + data[0].display_name);
+    } else if (request.status <= 500){
+      console.log("unable to geocode! Response code: " + request.status);
+      const data = JSON.parse(request.responseText);
+      console.log('error msg: ' + data.error);
+    } else {
+      console.log("server error");
+    }
+  };
+  request.onerror = function() {
+    console.log("unable to connect to server");
+  };
+  request.send();
+}
