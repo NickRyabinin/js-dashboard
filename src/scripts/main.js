@@ -1,12 +1,21 @@
-const locationLat = 54.625;
-const locationLon = 43.875;
+function getWeatherWithAJAX() {
+  getCoordinates();
+  fetchDataWithXHR();
+}
 
-const url = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
-  locationLon + "&current=temperature_2m&timezone=auto";
+function getWeatherWithFetch() {
+  getCoordinates();
+  fetchDataWithFetch();
+}
 
 function fetchDataWithXHR() {
+  const locationLat = 54.625;
+  const locationLon = 43.875;
+  const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
+  locationLon + "&current=temperature_2m&timezone=auto";
+
   const xhr = new XMLHttpRequest();
-  xhr.open("GET", url, true);
+  xhr.open("GET", weatherApiUrl, true);
   xhr.onload = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
@@ -20,7 +29,12 @@ function fetchDataWithXHR() {
 }
 
 function fetchDataWithFetch() {
-  fetch(url)
+  const locationLat = 54.625;
+  const locationLon = 43.875;
+  const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
+  locationLon + "&current=temperature_2m&timezone=auto";
+
+  fetch(weatherApiUrl)
     .then(response => {
       if (!response.ok) {
         throw new Error("Произошла ошибка при получении данных");
@@ -36,19 +50,17 @@ function fetchDataWithFetch() {
     });
 }
 
-setInterval(fetchDataWithXHR, 50000);
-setInterval(fetchDataWithFetch, 50000);
-
-const query = 'Ельники';
-const apiUrl = 'https://nominatim.openstreetmap.org/search';
-const requestUrl = apiUrl
-  + '?'
-  + 'q=' + encodeURIComponent(query)
-  + '&format=json';
-
-getCoordinates();
+// setInterval(fetchDataWithXHR, 50000);
+// setInterval(fetchDataWithFetch, 50000);
 
 function getCoordinates() {
+  const query = 'Ельники';
+  const geocodingApiUrl = 'https://nominatim.openstreetmap.org/search';
+  const requestUrl = geocodingApiUrl
+    + '?'
+    + 'q=' + encodeURIComponent(query)
+    + '&format=json';
+
   const request = new XMLHttpRequest();
   request.open('GET', requestUrl, true);
   request.onload = function() {
