@@ -29,13 +29,19 @@
 }
 
 form {
-  margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  margin-top: 20px;
 }
 
 .input {
-  width: 235px;
+  width: 230px;
   height: 30px;
   background-color: aquamarine;
+  margin-right: 10px;
+  padding-left: 5px;
 }
 
 .submit {
