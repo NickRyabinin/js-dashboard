@@ -1,11 +1,17 @@
 function getWeatherWithAJAX() {
-  getCoordinates();
-  fetchDataWithXHR();
+  const location = document.getElementById("location-ajax").value;
+  if (validateInput(location)) {
+      getCoordinates(location);
+      fetchDataWithXHR();
+  }
 }
 
 function getWeatherWithFetch() {
-  getCoordinates();
-  fetchDataWithFetch();
+  const location = document.getElementById("location-fetch").value;
+  if (validateInput(location)) {
+      getCoordinates(location);
+      fetchDataWithFetch();
+  }
 }
 
 function fetchDataWithXHR() {
@@ -53,12 +59,11 @@ function fetchDataWithFetch() {
 // setInterval(fetchDataWithXHR, 50000);
 // setInterval(fetchDataWithFetch, 50000);
 
-function getCoordinates() {
-  const query = 'Ельники';
+function getCoordinates(location) {
   const geocodingApiUrl = 'https://nominatim.openstreetmap.org/search';
   const requestUrl = geocodingApiUrl
     + '?'
-    + 'q=' + encodeURIComponent(query)
+    + 'q=' + encodeURIComponent(location)
     + '&format=json';
 
   const request = new XMLHttpRequest();
@@ -80,4 +85,15 @@ function getCoordinates() {
     console.log("unable to connect to server");
   };
   request.send();
+}
+
+function validateInput(inputValue) {
+  if (inputValue.trim() === '') {
+      alert('Поле не должно быть пустым');
+      return false;
+  } else if (/[^a-zA-Z0-9а-яА-Я\-_., ]/.test(inputValue)) {
+      alert('Введены недопустимые символы');
+      return false;
+  }
+  return true;
 }
