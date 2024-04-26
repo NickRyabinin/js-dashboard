@@ -55,3 +55,10 @@ form {
   margin-top: 50px;
   text-align: center;
 }
+
+.location {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+}
