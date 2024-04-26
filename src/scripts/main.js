@@ -1,16 +1,28 @@
 function getWeatherWithAJAX() {
   const location = document.getElementById("location-ajax").value;
   if (validateInput(location)) {
-      getCoordinates(location);
-      fetchDataWithXHR();
+    getCoordinates(location)
+      .then(locationData => {
+        document.getElementById("location1").innerHTML = locationData.locationName;
+        fetchDataWithXHR();
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 }
 
 function getWeatherWithFetch() {
   const location = document.getElementById("location-fetch").value;
   if (validateInput(location)) {
-      getCoordinates(location);
-      fetchDataWithFetch();
+    getCoordinates(location)
+      .then(locationData => {
+        document.getElementById("location2").innerHTML = locationData.locationName;
+        fetchDataWithFetch();
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 }
 
@@ -60,31 +72,36 @@ function fetchDataWithFetch() {
 // setInterval(fetchDataWithFetch, 50000);
 
 function getCoordinates(location) {
-  const geocodingApiUrl = 'https://nominatim.openstreetmap.org/search';
-  const requestUrl = geocodingApiUrl
-    + '?'
-    + 'q=' + encodeURIComponent(location)
-    + '&format=json';
-
-  const request = new XMLHttpRequest();
-  request.open('GET', requestUrl, true);
-  request.onload = function() {
-    if (request.status === 200){
-      const data = JSON.parse(request.responseText);
-      alert("Latitude: " + data[0].lat + "\nLongitude: " +
-        data[0].lon + "\nPlace: " + data[0].display_name);
-    } else if (request.status <= 500){
-      console.log("unable to geocode! Response code: " + request.status);
-      const data = JSON.parse(request.responseText);
-      console.log('error msg: ' + data.error);
-    } else {
-      console.log("server error");
-    }
-  };
-  request.onerror = function() {
-    console.log("unable to connect to server");
-  };
-  request.send();
+  return new Promise((resolve, reject) => {
+    const geocodingApiUrl = 'https://nominatim.openstreetmap.org/search';
+    const requestUrl = geocodingApiUrl + '?' + 'q=' + encodeURIComponent(location) + '&format=json';
+    const request = new XMLHttpRequest();
+    request.open('GET', requestUrl, true);
+    request.onload = function() {
+      if (request.status === 200) {
+        const data = JSON.parse(request.responseText);
+        const locationData = {
+          locationLat: data[0].lat,
+          locationLon: data[0].lon,
+          locationName: data[0].display_name
+        };
+        resolve(locationData);
+      } else if (request.status <= 500) {
+        console.log("unable to geocode! Response code: " + request.status);
+        const data = JSON.parse(request.responseText);
+        console.log('error msg: ' + data.error);
+        reject('Error while geocoding');
+      } else {
+        console.log("server error");
+        reject('Server error');
+      }
+    };
+    request.onerror = function() {
+      console.log("unable to connect to server");
+      reject('Unable to connect to server');
+    };
+    request.send();
+  });
 }
 
 function validateInput(inputValue) {
