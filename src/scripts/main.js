@@ -4,7 +4,7 @@ function getWeatherWithAJAX() {
     getCoordinates(location)
       .then(locationData => {
         document.getElementById("location1").innerHTML = locationData.locationName;
-        fetchDataWithXHR();
+        fetchDataWithXHR(locationData);
       })
       .catch(error => {
         console.error(error);
@@ -18,7 +18,7 @@ function getWeatherWithFetch() {
     getCoordinates(location)
       .then(locationData => {
         document.getElementById("location2").innerHTML = locationData.locationName;
-        fetchDataWithFetch();
+        fetchDataWithFetch(locationData);
       })
       .catch(error => {
         console.error(error);
@@ -26,11 +26,11 @@ function getWeatherWithFetch() {
   }
 }
 
-function fetchDataWithXHR() {
-  const locationLat = 54.625;
-  const locationLon = 43.875;
+function fetchDataWithXHR(locationData) {
+  const locationLat = locationData.locationLat;
+  const locationLon = locationData.locationLon;
   const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
-  locationLon + "&current=temperature_2m&timezone=auto";
+    locationLon + "&current=temperature_2m&timezone=auto";
 
   const xhr = new XMLHttpRequest();
   xhr.open("GET", weatherApiUrl, true);
@@ -46,11 +46,11 @@ function fetchDataWithXHR() {
   xhr.send();
 }
 
-function fetchDataWithFetch() {
-  const locationLat = 54.625;
-  const locationLon = 43.875;
+function fetchDataWithFetch(locationData) {
+  const locationLat = locationData.locationLat;
+  const locationLon = locationData.locationLon;
   const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
-  locationLon + "&current=temperature_2m&timezone=auto";
+    locationLon + "&current=temperature_2m&timezone=auto";
 
   fetch(weatherApiUrl)
     .then(response => {
@@ -80,6 +80,11 @@ function getCoordinates(location) {
     request.onload = function() {
       if (request.status === 200) {
         const data = JSON.parse(request.responseText);
+        if (Object.keys(data).length === 0) {
+          alert('Местоположение не может быть определено.\nПроверьте правильность ввода.');
+          reject('Error while geocoding');
+          return;
+        }
         const locationData = {
           locationLat: data[0].lat,
           locationLon: data[0].lon,
