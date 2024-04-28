@@ -81,10 +81,11 @@ function getCoordinates(location) {
       if (request.status === 200) {
         const data = JSON.parse(request.responseText);
         if (Object.keys(data).length === 0) {
-          alert('Местоположение не может быть определено.\nПроверьте правильность ввода.');
+          showMessage('Местоположение не может быть определено.<br>Проверьте правильность ввода.');
           reject('Error while geocoding');
           return;
         }
+        showMessage('');
         const locationData = {
           locationLat: data[0].lat,
           locationLon: data[0].lon,
@@ -111,11 +112,15 @@ function getCoordinates(location) {
 
 function validateInput(inputValue) {
   if (inputValue.trim() === '') {
-      alert('Поле не должно быть пустым');
+      showMessage('Поле не должно быть пустым');
       return false;
   } else if (/[^a-zA-Z0-9а-яА-Я\-_., ]/.test(inputValue)) {
-      alert('Введены недопустимые символы');
+      showMessage('Введены недопустимые символы');
       return false;
   }
   return true;
+}
+
+function showMessage(message) {
+  document.getElementById("error").innerHTML = message;
 }
