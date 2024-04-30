@@ -58,8 +58,15 @@ form {
 
 .current-temp {
   font-size: 48px;
-  margin-top: 50px;
+  margin-top: 20px;
   text-align: center;
+}
+
+.wind-direction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .location {
