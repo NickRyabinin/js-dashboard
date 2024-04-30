@@ -132,12 +132,16 @@ function showMessage(message) {
 }
 
 function drawWindDirection(degrees, cardId) {
-  const canvas = document.createElement('canvas');
-  canvas.id = 'arrowCanvas';
-  canvas.width = 70;
-  canvas.height = 70;
   const windDirectionDiv = document.getElementById('wind-direction' + cardId);
-  windDirectionDiv.appendChild(canvas);
+  let canvas = windDirectionDiv.querySelector('canvas');
+
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+    canvas.width = 70;
+    canvas.height = 70;
+    windDirectionDiv.appendChild(canvas);
+  }
+
   const ctx = canvas.getContext('2d');
   const centerX = canvas.width / 2;
   const centerY = canvas.height / 2;
