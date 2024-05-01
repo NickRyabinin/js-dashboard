@@ -56,16 +56,24 @@ form {
   background-color: aquamarine;
 }
 
-.current-temp {
+.weather-parameters-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.temperature {
   font-size: 48px;
   margin-top: 20px;
   text-align: center;
 }
 
-.wind-direction {
+.wind {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 36px;
   margin-top: 20px;
 }
 
