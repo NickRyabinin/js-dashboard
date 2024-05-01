@@ -37,11 +37,17 @@ function fetchDataWithXHR(locationData) {
   xhr.open("GET", weatherApiUrl, true);
   xhr.onload = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      const temperature = response.current.temperature_2m;
-      const windDegree = response.current.wind_direction_10m;
+      const data = JSON.parse(xhr.responseText);
+      const temperature = data.current.temperature_2m;
+      const feelsLikeTemperature = data.current.apparent_temperature;
+      const windSpeed = data.current.wind_speed_10m;
+      const windDegree = data.current.wind_direction_10m;
+      const windGusts = data.current.wind_gusts_10m;
       document.getElementById("current-temp1").innerHTML = temperature + "&deg;C";
+      document.getElementById("apparent-temp1").innerHTML = feelsLikeTemperature + "&deg;C";
+      document.getElementById("wind-speed1").innerHTML = windSpeed + "m/s";
       drawWindDirection(windDegree, 1);
+      document.getElementById("wind-gusts1").innerHTML = windGusts + "m/s";
     } else {
       console.log("Произошла ошибка при получении данных");
     }
@@ -65,9 +71,15 @@ function fetchDataWithFetch(locationData) {
     })
     .then(data => {
       const temperature = data.current.temperature_2m;
+      const feelsLikeTemperature = data.current.apparent_temperature;
+      const windSpeed = data.current.wind_speed_10m;
       const windDegree = data.current.wind_direction_10m;
+      const windGusts = data.current.wind_gusts_10m;
       document.getElementById("current-temp2").innerHTML = temperature + "&deg;C";
+      document.getElementById("apparent-temp2").innerHTML = feelsLikeTemperature + "&deg;C";
+      document.getElementById("wind-speed2").innerHTML = windSpeed + "m/s";
       drawWindDirection(windDegree, 2);
+      document.getElementById("wind-gusts2").innerHTML = windGusts + "m/s";
     })
     .catch(error => {
       console.error(error);
