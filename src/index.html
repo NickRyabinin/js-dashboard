@@ -18,8 +18,15 @@
             <input class="submit" type="button" onclick="getWeatherWithAJAX()" value="Получить погоду">
           </form>
           <div id="location1" class="location">Местоположение не определено</div>
-          <div id="current-temp1" class="current-temp">N/A</div>
-          <div id="wind-direction1" class="wind-direction"></div>
+          <div class="weather-parameters-container">
+            <div id="current-temp1" class="temperature"></div>
+            <div id="apparent-temp1" class="temperature"></div>
+          </div>
+          <div class="weather-parameters-container">
+            <div id="wind-speed1" class="wind"></div>
+            <div id="wind-direction1" class="wind"></div>
+            <div id="wind-gusts1" class="wind"></div>
+          </div>
         </div>
         <div class="card bg-blue">
           <form>
@@ -27,8 +34,15 @@
             <input class="submit" type="button" onclick="getWeatherWithFetch()" value="Получить погоду">
           </form>
           <div id="location2" class="location">Местоположение не определено</div>
-          <div id="current-temp2" class="current-temp">N/A</div>
-          <div id="wind-direction2" class="wind-direction"></div>
+          <div class="weather-parameters-container">
+            <div id="current-temp2" class="temperature"></div>
+            <div id="apparent-temp2" class="temperature"></div>
+          </div>
+          <div class="weather-parameters-container">
+            <div id="wind-speed2" class="wind"></div>
+            <div id="wind-direction2" class="wind"></div>
+            <div id="wind-gusts2" class="wind"></div>
+          </div>
         </div>
     </div>
     <script src="scripts/main.js"></script>
