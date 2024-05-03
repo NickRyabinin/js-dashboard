@@ -30,7 +30,7 @@ function fetchDataWithXHR(locationData) {
   const locationLat = locationData.locationLat;
   const locationLon = locationData.locationLon;
   const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
-    locationLon + "&current=temperature_2m,apparent_temperature,rain,showers,snowfall,wind_speed_10m," +
+    locationLon + "&current=weather_code,temperature_2m,apparent_temperature,wind_speed_10m," +
     "wind_direction_10m,wind_gusts_10m&wind_speed_unit=ms&timezone=auto";
 
   const xhr = new XMLHttpRequest();
@@ -38,12 +38,28 @@ function fetchDataWithXHR(locationData) {
   xhr.onload = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       const data = JSON.parse(xhr.responseText);
+      const time = data.current.time;
       const temperature = data.current.temperature_2m;
       const feelsLikeTemperature = data.current.apparent_temperature;
       const windSpeed = data.current.wind_speed_10m;
       const windDegree = data.current.wind_direction_10m;
       const windGusts = data.current.wind_gusts_10m;
+      const weatherCode = data.current.weather_code;
+      let precipitation = "--";
+
+      if ([61, 63, 65, 66, 67].includes(weatherCode)) {
+        precipitation = "Дождь";
+      }
+      if ([80, 81, 82].includes(weatherCode)) {
+        precipitation = "Ливень";
+      }
+      if ([71, 73, 75, 77, 85, 86].includes(weatherCode)) {
+        precipitation = "Снег"
+      }
+
+      document.getElementById("time1").innerHTML = "По состоянию на " + time;
       document.getElementById("current-temp1").innerHTML = temperature + "&deg;C";
+      document.getElementById("precipitation1").innerHTML = precipitation;
       document.getElementById("apparent-temp1").innerHTML = feelsLikeTemperature + "&deg;C";
       document.getElementById("wind-speed1").innerHTML = windSpeed + "m/s";
       drawWindDirection(windDegree, 1);
@@ -59,7 +75,7 @@ function fetchDataWithFetch(locationData) {
   const locationLat = locationData.locationLat;
   const locationLon = locationData.locationLon;
   const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
-    locationLon + "&current=temperature_2m,apparent_temperature,rain,showers,snowfall,wind_speed_10m," +
+    locationLon + "&current=weather_code,temperature_2m,apparent_temperature,wind_speed_10m," +
     "wind_direction_10m,wind_gusts_10m&wind_speed_unit=ms&timezone=auto";
 
   fetch(weatherApiUrl)
@@ -70,12 +86,28 @@ function fetchDataWithFetch(locationData) {
       return response.json();
     })
     .then(data => {
+      const time = data.current.time;
       const temperature = data.current.temperature_2m;
       const feelsLikeTemperature = data.current.apparent_temperature;
       const windSpeed = data.current.wind_speed_10m;
       const windDegree = data.current.wind_direction_10m;
       const windGusts = data.current.wind_gusts_10m;
+      const weatherCode = data.current.weather_code;
+      let precipitation = "--";
+
+      if ([61, 63, 65, 66, 67].includes(weatherCode)) {
+        precipitation = "Дождь";
+      }
+      if ([80, 81, 82].includes(weatherCode)) {
+        precipitation = "Ливень";
+      }
+      if ([71, 73, 75, 77, 85, 86].includes(weatherCode)) {
+        precipitation = "Снег"
+      }
+
+      document.getElementById("time2").innerHTML = "По состоянию на " + time;
       document.getElementById("current-temp2").innerHTML = temperature + "&deg;C";
+      document.getElementById("precipitation2").innerHTML = precipitation;
       document.getElementById("apparent-temp2").innerHTML = feelsLikeTemperature + "&deg;C";
       document.getElementById("wind-speed2").innerHTML = windSpeed + "m/s";
       drawWindDirection(windDegree, 2);
