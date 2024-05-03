@@ -66,14 +66,14 @@ form {
 }
 
 .temperature {
-  font-size: 36px;
+  font-size: 32px;
 }
 
 .wind {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 36px;
+  font-size: 32px;
 }
 
 .location {
@@ -89,4 +89,10 @@ form {
   display: flex;
   flex-direction: column;
   text-align: center;
+  margin-bottom: 10px;
+}
+
+.time {
+  margin: 10px 20px;
+  height: 20px;
 }
