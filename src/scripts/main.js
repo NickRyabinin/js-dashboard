@@ -4,10 +4,16 @@ function getWeatherWithAJAX() {
     getCoordinates(location)
       .then(locationData => {
         document.getElementById("location1").innerHTML = locationData.locationName;
-        fetchDataWithXHR(locationData);
+        fetchDataWithXHR(locationData)
+          .then(weatherData => {
+            showCurrentWeather(1, weatherData);
+          })
+          .catch(error => {
+            showMessage(error);
+          });
       })
       .catch(error => {
-        console.error(error);
+        showMessage(error);
       });
   }
 }
@@ -21,54 +27,31 @@ function getWeatherWithFetch() {
         fetchDataWithFetch(locationData);
       })
       .catch(error => {
-        console.error(error);
+        showMessage(error);
       });
   }
 }
 
 function fetchDataWithXHR(locationData) {
-  const locationLat = locationData.locationLat;
-  const locationLon = locationData.locationLon;
-  const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
-    locationLon + "&current=weather_code,temperature_2m,apparent_temperature,wind_speed_10m," +
-    "wind_direction_10m,wind_gusts_10m&wind_speed_unit=ms&timezone=auto";
+  return new Promise((resolve, reject) => {
+    const locationLat = locationData.locationLat;
+    const locationLon = locationData.locationLon;
+    const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
+      locationLon + "&current=weather_code,temperature_2m,apparent_temperature,wind_speed_10m," +
+      "wind_direction_10m,wind_gusts_10m&wind_speed_unit=ms&timezone=auto";
 
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", weatherApiUrl, true);
-  xhr.onload = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      const data = JSON.parse(xhr.responseText);
-      const time = data.current.time;
-      const temperature = data.current.temperature_2m;
-      const feelsLikeTemperature = data.current.apparent_temperature;
-      const windSpeed = data.current.wind_speed_10m;
-      const windDegree = data.current.wind_direction_10m;
-      const windGusts = data.current.wind_gusts_10m;
-      const weatherCode = data.current.weather_code;
-      let precipitation = "--";
-
-      if ([61, 63, 65, 66, 67].includes(weatherCode)) {
-        precipitation = "Дождь";
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", weatherApiUrl, true);
+    xhr.onload = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        const weatherData = JSON.parse(xhr.responseText);
+        resolve(weatherData);
+      } else {
+        reject("Произошла ошибка при получении данных");
       }
-      if ([80, 81, 82].includes(weatherCode)) {
-        precipitation = "Ливень";
-      }
-      if ([71, 73, 75, 77, 85, 86].includes(weatherCode)) {
-        precipitation = "Снег"
-      }
-
-      document.getElementById("time1").innerHTML = "По состоянию на " + time;
-      document.getElementById("current-temp1").innerHTML = temperature + "&deg;C";
-      document.getElementById("precipitation1").innerHTML = precipitation;
-      document.getElementById("apparent-temp1").innerHTML = feelsLikeTemperature + "&deg;C";
-      document.getElementById("wind-speed1").innerHTML = windSpeed + "m/s";
-      drawWindDirection(windDegree, 1);
-      document.getElementById("wind-gusts1").innerHTML = windGusts + "m/s";
-    } else {
-      console.log("Произошла ошибка при получении данных");
-    }
-  };
-  xhr.send();
+    };
+    xhr.send();
+  });
 }
 
 function fetchDataWithFetch(locationData) {
@@ -93,28 +76,18 @@ function fetchDataWithFetch(locationData) {
       const windDegree = data.current.wind_direction_10m;
       const windGusts = data.current.wind_gusts_10m;
       const weatherCode = data.current.weather_code;
-      let precipitation = "--";
-
-      if ([61, 63, 65, 66, 67].includes(weatherCode)) {
-        precipitation = "Дождь";
-      }
-      if ([80, 81, 82].includes(weatherCode)) {
-        precipitation = "Ливень";
-      }
-      if ([71, 73, 75, 77, 85, 86].includes(weatherCode)) {
-        precipitation = "Снег"
-      }
+      const precipitation = getWeatherCondition(weatherCode);
 
       document.getElementById("time2").innerHTML = "По состоянию на " + time;
       document.getElementById("current-temp2").innerHTML = temperature + "&deg;C";
       document.getElementById("precipitation2").innerHTML = precipitation;
       document.getElementById("apparent-temp2").innerHTML = feelsLikeTemperature + "&deg;C";
       document.getElementById("wind-speed2").innerHTML = windSpeed + "m/s";
-      drawWindDirection(windDegree, 2);
+      drawWindDirection(2, windDegree);
       document.getElementById("wind-gusts2").innerHTML = windGusts + "m/s";
     })
     .catch(error => {
-      console.error(error);
+      showMessage(error);
     });
 }
 
@@ -143,17 +116,17 @@ function getCoordinates(location) {
         };
         resolve(locationData);
       } else if (request.status <= 500) {
-        console.log("unable to geocode! Response code: " + request.status);
+        showMessage("unable to geocode! Response code: " + request.status);
         const data = JSON.parse(request.responseText);
-        console.log('error msg: ' + data.error);
+        showMessage('error msg: ' + data.error);
         reject('Error while geocoding');
       } else {
-        console.log("server error");
+        showMessage("server error");
         reject('Server error');
       }
     };
     request.onerror = function() {
-      console.log("unable to connect to server");
+      showMessage("unable to connect to server");
       reject('Unable to connect to server');
     };
     request.send();
@@ -175,7 +148,7 @@ function showMessage(message) {
   document.getElementById("error").innerHTML = message;
 }
 
-function drawWindDirection(degrees, cardId) {
+function drawWindDirection(cardId, degrees) {
   const windDirectionDiv = document.getElementById('wind-direction' + cardId);
   let canvas = windDirectionDiv.querySelector('canvas');
 
@@ -226,4 +199,42 @@ function drawWindDirection(degrees, cardId) {
   ctx.translate(centerX, centerY);
   ctx.rotate(-degrees * Math.PI / 180);
   ctx.translate(-centerX, -centerY);
+}
+
+function getWeatherCondition(weatherCode) {
+  let condition = '--';
+  const rain = [61, 63, 65, 66, 67];
+  const showers = [80, 81, 82];
+  const snow = [71, 73, 75, 77, 85, 86];
+
+  if (rain.includes(weatherCode)) {
+    condition = "Дождь";
+  }
+  if (showers.includes(weatherCode)) {
+    condition = "Ливень";
+  }
+  if (snow.includes(weatherCode)) {
+    condition = "Снег"
+  }
+
+  return condition;
+}
+
+function showCurrentWeather(cardId, data) {
+  const time = data.current.time;
+  const temperature = data.current.temperature_2m;
+  const feelsLikeTemperature = data.current.apparent_temperature;
+  const windSpeed = data.current.wind_speed_10m;
+  const windDegree = data.current.wind_direction_10m;
+  const windGusts = data.current.wind_gusts_10m;
+  const weatherCode = data.current.weather_code;
+  const precipitation = getWeatherCondition(weatherCode);
+
+  document.getElementById("time" + cardId).innerHTML = "По состоянию на " + time;
+  document.getElementById("current-temp" + cardId).innerHTML = temperature + "&deg;C";
+  document.getElementById("precipitation" + cardId).innerHTML = precipitation;
+  document.getElementById("apparent-temp" + cardId).innerHTML = feelsLikeTemperature + "&deg;C";
+  document.getElementById("wind-speed" + cardId).innerHTML = windSpeed + "m/s";
+  drawWindDirection(1, windDegree);
+  document.getElementById("wind-gusts" + cardId).innerHTML = windGusts + "m/s";
 }
