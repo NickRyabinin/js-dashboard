@@ -24,7 +24,13 @@ function getWeatherWithFetch() {
     getCoordinates(location)
       .then(locationData => {
         document.getElementById("location2").innerHTML = locationData.locationName;
-        fetchDataWithFetch(locationData);
+        fetchDataWithFetch(locationData)
+          .then(weatherData => {
+            showCurrentWeather(2, weatherData);
+          })
+          .catch(error => {
+            showMessage(error);
+          });
       })
       .catch(error => {
         showMessage(error);
@@ -54,41 +60,19 @@ function fetchDataWithXHR(locationData) {
   });
 }
 
-function fetchDataWithFetch(locationData) {
+async function fetchDataWithFetch(locationData) {
   const locationLat = locationData.locationLat;
   const locationLon = locationData.locationLon;
   const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
     locationLon + "&current=weather_code,temperature_2m,apparent_temperature,wind_speed_10m," +
     "wind_direction_10m,wind_gusts_10m&wind_speed_unit=ms&timezone=auto";
 
-  fetch(weatherApiUrl)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("Произошла ошибка при получении данных");
-      }
-      return response.json();
-    })
-    .then(data => {
-      const time = data.current.time;
-      const temperature = data.current.temperature_2m;
-      const feelsLikeTemperature = data.current.apparent_temperature;
-      const windSpeed = data.current.wind_speed_10m;
-      const windDegree = data.current.wind_direction_10m;
-      const windGusts = data.current.wind_gusts_10m;
-      const weatherCode = data.current.weather_code;
-      const precipitation = getWeatherCondition(weatherCode);
-
-      document.getElementById("time2").innerHTML = "По состоянию на " + time;
-      document.getElementById("current-temp2").innerHTML = temperature + "&deg;C";
-      document.getElementById("precipitation2").innerHTML = precipitation;
-      document.getElementById("apparent-temp2").innerHTML = feelsLikeTemperature + "&deg;C";
-      document.getElementById("wind-speed2").innerHTML = windSpeed + "m/s";
-      drawWindDirection(2, windDegree);
-      document.getElementById("wind-gusts2").innerHTML = windGusts + "m/s";
-    })
-    .catch(error => {
-      showMessage(error);
-    });
+  const response = await fetch(weatherApiUrl);
+  if (!response.ok) {
+    throw new Error("Произошла ошибка при получении данных");
+  }
+  const weatherData = await response.json();
+  return weatherData;
 }
 
 // setInterval(fetchDataWithXHR, 50000);
@@ -104,9 +88,7 @@ function getCoordinates(location) {
       if (request.status === 200) {
         const data = JSON.parse(request.responseText);
         if (Object.keys(data).length === 0) {
-          showMessage('Местоположение не может быть определено.<br>Проверьте правильность ввода.');
-          reject('Error while geocoding');
-          return;
+          reject('Местоположение не может быть определено');
         }
         showMessage('');
         const locationData = {
@@ -116,17 +98,12 @@ function getCoordinates(location) {
         };
         resolve(locationData);
       } else if (request.status <= 500) {
-        showMessage("unable to geocode! Response code: " + request.status);
-        const data = JSON.parse(request.responseText);
-        showMessage('error msg: ' + data.error);
         reject('Error while geocoding');
       } else {
-        showMessage("server error");
         reject('Server error');
       }
     };
     request.onerror = function() {
-      showMessage("unable to connect to server");
       reject('Unable to connect to server');
     };
     request.send();
@@ -235,6 +212,6 @@ function showCurrentWeather(cardId, data) {
   document.getElementById("precipitation" + cardId).innerHTML = precipitation;
   document.getElementById("apparent-temp" + cardId).innerHTML = feelsLikeTemperature + "&deg;C";
   document.getElementById("wind-speed" + cardId).innerHTML = windSpeed + "m/s";
-  drawWindDirection(1, windDegree);
+  drawWindDirection(cardId, windDegree);
   document.getElementById("wind-gusts" + cardId).innerHTML = windGusts + "m/s";
 }
