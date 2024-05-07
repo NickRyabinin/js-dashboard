@@ -1,3 +1,14 @@
+function checkEnterPressed(event) {
+  if (event.key === "Enter") {
+    const targetId = event.target.id;
+    if (targetId === "location-ajax") {
+      getWeatherWithAJAX();
+    } else if (targetId === "location-fetch") {
+      getWeatherWithFetch();
+    }
+  }
+}
+
 function getWeatherWithAJAX() {
   const location = document.getElementById("location-ajax").value;
   if (validateInput(location)) {
