@@ -13,8 +13,8 @@
     <div id="error" class="error"></div>
     <div class="container">
         <div class="card bg-blue">
-          <form>
-            <input id="location-ajax" class="input" type="search" placeholder="Type needed location here">
+          <form onsubmit="return false">
+            <input id="location-ajax" class="input" type="search" placeholder="Type needed location here" onkeyup="checkEnterPressed(event)">
             <input class="submit" type="button" onclick="getWeatherWithAJAX()" value="Получить погоду">
           </form>
           <div id="location1" class="location">Местоположение не определено</div>
@@ -46,8 +46,8 @@
           </div>
         </div>
         <div class="card bg-blue">
-          <form>
-            <input id="location-fetch" class="input" type="search" placeholder="Type needed location here">
+          <form onsubmit="return false">
+            <input id="location-fetch" class="input" type="search" placeholder="Type needed location here" onkeyup="checkEnterPressed(event)">
             <input class="submit" type="button" onclick="getWeatherWithFetch()" value="Получить погоду">
           </form>
           <div id="location2" class="location">Местоположение не определено</div>
