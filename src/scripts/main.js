@@ -1,9 +1,9 @@
-function checkEnterPressed(event) {
-  if (event.key === "Enter") {
-    const targetId = event.target.id;
-    if (targetId === "location-ajax") {
+function getWeather(event) {
+  const formId = event.target.closest('form').id;
+  if (event.type ===  "click" || event.key === "Enter") {
+    if (formId === "form-ajax") {
       getWeatherWithAJAX();
-    } else if (targetId === "location-fetch") {
+    } else if (formId === "form-fetch") {
       getWeatherWithFetch();
     }
   }
