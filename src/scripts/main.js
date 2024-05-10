@@ -18,6 +18,7 @@ function getWeatherWithAJAX() {
         fetchDataWithXHR(locationData)
           .then(weatherData => {
             showCurrentWeather(1, weatherData);
+            showTomorrowWeather(1, weatherData);
           })
           .catch(error => {
             showMessage(error);
@@ -38,6 +39,7 @@ function getWeatherWithFetch() {
         fetchDataWithFetch(locationData)
           .then(weatherData => {
             showCurrentWeather(2, weatherData);
+            showTomorrowWeather(2, weatherData);
           })
           .catch(error => {
             showMessage(error);
@@ -53,9 +55,13 @@ function fetchDataWithXHR(locationData) {
   return new Promise((resolve, reject) => {
     const locationLat = locationData.locationLat;
     const locationLon = locationData.locationLon;
-    const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
-      locationLon + "&current=weather_code,temperature_2m,apparent_temperature,wind_speed_10m," +
-      "wind_direction_10m,wind_gusts_10m&wind_speed_unit=ms&timezone=auto";
+    const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" + locationLon +
+      "&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m" +
+      "&hourly=temperature_2m,apparent_temperature,precipitation_probability,precipitation,weather_code,wind_speed_10m," +
+        "wind_direction_10m,wind_gusts_10m" +
+      "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_hours," +
+        "precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant" +
+      "&wind_speed_unit=ms&timezone=auto&forecast_days=2";
 
     const xhr = new XMLHttpRequest();
     xhr.open("GET", weatherApiUrl, true);
@@ -74,9 +80,13 @@ function fetchDataWithXHR(locationData) {
 async function fetchDataWithFetch(locationData) {
   const locationLat = locationData.locationLat;
   const locationLon = locationData.locationLon;
-  const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" +
-    locationLon + "&current=weather_code,temperature_2m,apparent_temperature,wind_speed_10m," +
-    "wind_direction_10m,wind_gusts_10m&wind_speed_unit=ms&timezone=auto";
+  const weatherApiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + locationLat + "&longitude=" + locationLon +
+    "&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m" +
+    "&hourly=temperature_2m,apparent_temperature,precipitation_probability,precipitation,weather_code,wind_speed_10m," +
+      "wind_direction_10m,wind_gusts_10m" +
+    "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_hours," +
+      "precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant" +
+    "&wind_speed_unit=ms&timezone=auto&forecast_days=2";
 
   const response = await fetch(weatherApiUrl);
   if (!response.ok) {
@@ -218,11 +228,30 @@ function showCurrentWeather(cardId, data) {
   const weatherCode = data.current.weather_code;
   const precipitation = getWeatherCondition(weatherCode);
 
-  document.getElementById("time" + cardId).innerHTML = "По состоянию на " + time;
+  document.getElementById("time" + cardId).innerHTML = "По состоянию на " + time + ":";
   document.getElementById("current-temp" + cardId).innerHTML = temperature + "&deg;C";
   document.getElementById("precipitation" + cardId).innerHTML = precipitation;
   document.getElementById("apparent-temp" + cardId).innerHTML = feelsLikeTemperature + "&deg;C";
   document.getElementById("wind-speed" + cardId).innerHTML = windSpeed + "m/s";
   drawWindDirection(cardId, windDegree);
   document.getElementById("wind-gusts" + cardId).innerHTML = windGusts + "m/s";
+}
+
+function showTomorrowWeather(cardId, data) {
+  const time = data.daily.time[1];
+  const minTemperature = data.daily.temperature_2m_min[1];
+  const maxTemperature = data.daily.temperature_2m_max[1];
+  const windSpeed = data.daily.wind_speed_10m_max[1];
+  const windDegree = data.daily.wind_direction_10m_dominant[1];
+  const windGusts = data.daily.wind_gusts_10m_max[1];
+  const weatherCode = data.daily.weather_code[1];
+  const precipitation = getWeatherCondition(weatherCode);
+
+  document.getElementById("tomorrow-time" + cardId).innerHTML = "Завтра, " + time + ":";
+  document.getElementById("tomorrow-min-temp" + cardId).innerHTML = minTemperature + "&deg;C";
+  document.getElementById("tomorrow-max-temp" + cardId).innerHTML = maxTemperature + "&deg;C";
+  document.getElementById("tomorrow-precipitation" + cardId).innerHTML = precipitation;
+  document.getElementById("tomorrow-wind-speed" + cardId).innerHTML = windSpeed + "m/s";
+  // drawWindDirection(cardId, windDegree);
+  document.getElementById("tomorrow-wind-gusts" + cardId).innerHTML = windGusts + "m/s";
 }
