@@ -146,8 +146,8 @@ function showMessage(message) {
   document.getElementById("error").innerHTML = message;
 }
 
-function drawWindDirection(cardId, degrees) {
-  const windDirectionDiv = document.getElementById('wind-direction' + cardId);
+function drawWindDirection(elementId, degrees) {
+  const windDirectionDiv = document.getElementById(elementId);
   let canvas = windDirectionDiv.querySelector('canvas');
 
   if (!canvas) {
@@ -233,7 +233,7 @@ function showCurrentWeather(cardId, data) {
   document.getElementById("precipitation" + cardId).innerHTML = precipitation;
   document.getElementById("apparent-temp" + cardId).innerHTML = feelsLikeTemperature + "&deg;C";
   document.getElementById("wind-speed" + cardId).innerHTML = windSpeed + "m/s";
-  drawWindDirection(cardId, windDegree);
+  drawWindDirection("current-wind-direction" + cardId, windDegree);
   document.getElementById("wind-gusts" + cardId).innerHTML = windGusts + "m/s";
 }
 
@@ -252,6 +252,6 @@ function showTomorrowWeather(cardId, data) {
   document.getElementById("tomorrow-max-temp" + cardId).innerHTML = maxTemperature + "&deg;C";
   document.getElementById("tomorrow-precipitation" + cardId).innerHTML = precipitation;
   document.getElementById("tomorrow-wind-speed" + cardId).innerHTML = windSpeed + "m/s";
-  // drawWindDirection(cardId, windDegree);
+  drawWindDirection("tomorrow-wind-direction" + cardId, windDegree);
   document.getElementById("tomorrow-wind-gusts" + cardId).innerHTML = windGusts + "m/s";
 }
