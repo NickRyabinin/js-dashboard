@@ -237,6 +237,33 @@ function showCurrentWeather(cardId, data) {
   document.getElementById("wind-gusts" + cardId).innerHTML = windGusts + "m/s";
 }
 
+function showOneHourWeather(cardId, data) {
+  const currentDate = new Date();
+  const currentHour = currentDate.getHours();
+  const currentMinute = currentDate.getMinutes();
+  let neededHour = currentHour + 1;
+  if (currentMinute >= 30) {
+    neededHour = currentHour + 2;
+  }
+
+  const time = data.hourly.time[neededHour];
+  const temperature = data.hourly.temperature_2m[neededHour];
+  const feelsLikeTemperature = data.hourly.apparent_temperature[neededHour];
+  const windSpeed = data.hourly.wind_speed_10m[neededHour];
+  const windDegree = data.hourly.wind_direction_10m[neededHour];
+  const windGusts = data.hourly.wind_gusts_10m[neededHour];
+  const weatherCode = data.hourly.weather_code[neededHour];
+  const precipitation = getWeatherCondition(weatherCode);
+
+  document.getElementById("one-hour-time" + cardId).innerHTML = "Через час, в " + time + ":";
+  document.getElementById("one-hour-temp" + cardId).innerHTML = temperature + "&deg;C";
+  document.getElementById("one-hour-precipitation" + cardId).innerHTML = precipitation;
+  document.getElementById("one-hour-apparent-temp" + cardId).innerHTML = feelsLikeTemperature + "&deg;C";
+  document.getElementById("one-hour-wind-speed" + cardId).innerHTML = windSpeed + "m/s";
+  drawWindDirection("one-hour-wind-direction" + cardId, windDegree);
+  document.getElementById("one-hour-wind-gusts" + cardId).innerHTML = windGusts + "m/s";
+}
+
 function showTomorrowWeather(cardId, data) {
   const time = data.daily.time[1];
   const minTemperature = data.daily.temperature_2m_min[1];
