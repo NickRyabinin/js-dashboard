@@ -11,7 +11,7 @@
 .error {
   color: rgb(209, 128, 104);
   text-align: center;
-  padding: 20px;
+  padding: 15px;
   position: fixed;
   top: 0;
   left: 50%;
@@ -25,12 +25,12 @@
   gap: 100px;
   flex-wrap: wrap;
   height: 100%;
-  margin: 9vh 0;
+  margin: 7vh 0;
 }
 
 .card {
   width: 400px;
-  min-height: 600px;
+  height: 620px;
   border-radius: 10px;
   padding: 10px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -42,11 +42,11 @@ form {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  margin-top: 20px;
+  margin-top: 12px;
 }
 
 .input {
-  width: 230px;
+  width: 245px;
   height: 30px;
   background-color: aquamarine;
   margin-right: 10px;
@@ -54,7 +54,7 @@ form {
 }
 
 .submit {
-  width: 120px;
+  width: 125px;
   height: 30px;
   background-color: aquamarine;
 }
@@ -68,22 +68,22 @@ form {
 }
 
 .temperature {
-  font-size: 32px;
+  font-size: 30px;
 }
 
 .wind {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
+  font-size: 30px;
 }
 
 .location {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 20px;
-  height: 80px;
+  margin: 10px;
+  height: 70px;
 }
 
 .precipitation {
@@ -99,6 +99,6 @@ form {
 }
 
 .time {
-  margin: 10px 20px;
-  height: 20px;
+  margin: 10px;
+  height: 15px;
 }
