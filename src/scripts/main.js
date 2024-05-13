@@ -18,6 +18,7 @@ function getWeatherWithAJAX() {
         fetchDataWithXHR(locationData)
           .then(weatherData => {
             showCurrentWeather(1, weatherData);
+            showOneHourWeather(1, weatherData);
             showTomorrowWeather(1, weatherData);
           })
           .catch(error => {
@@ -39,6 +40,7 @@ function getWeatherWithFetch() {
         fetchDataWithFetch(locationData)
           .then(weatherData => {
             showCurrentWeather(2, weatherData);
+            showOneHourWeather(2, weatherData);
             showTomorrowWeather(2, weatherData);
           })
           .catch(error => {
@@ -152,15 +154,15 @@ function drawWindDirection(elementId, degrees) {
 
   if (!canvas) {
     canvas = document.createElement('canvas');
-    canvas.width = 70;
-    canvas.height = 70;
+    canvas.width = 64;
+    canvas.height = 64;
     windDirectionDiv.appendChild(canvas);
   }
 
   const ctx = canvas.getContext('2d');
   const centerX = canvas.width / 2;
   const centerY = canvas.height / 2;
-  const circleRadius = 18;
+  const circleRadius = 16;
   const triangleHeight = 10;
   const triangleBase = 8;
   const triangleTipOffset = 4;
