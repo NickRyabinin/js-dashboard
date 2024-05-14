@@ -221,6 +221,7 @@ function getWeatherCondition(weatherCode) {
 }
 
 function showCurrentWeather(cardId, data) {
+  const timeZone = data.timezone;
   const time = data.current.time;
   const temperature = data.current.temperature_2m;
   const feelsLikeTemperature = data.current.apparent_temperature;
@@ -230,7 +231,7 @@ function showCurrentWeather(cardId, data) {
   const weatherCode = data.current.weather_code;
   const precipitation = getWeatherCondition(weatherCode);
 
-  document.getElementById("time" + cardId).innerHTML = "По состоянию на " + time + ":";
+  document.getElementById("time" + cardId).innerHTML = "По состоянию на " + time + "(" + timeZone + ")" + ":";
   document.getElementById("current-temp" + cardId).innerHTML = temperature + "&deg;C";
   document.getElementById("precipitation" + cardId).innerHTML = precipitation;
   document.getElementById("apparent-temp" + cardId).innerHTML = feelsLikeTemperature + "&deg;C";
@@ -240,12 +241,15 @@ function showCurrentWeather(cardId, data) {
 }
 
 function showOneHourWeather(cardId, data) {
+  const timeZone = data.timezone;
   const currentDate = new Date();
-  const currentHour = currentDate.getHours();
+  const timeOptions = { timeZone: timeZone, hour12: false, hour: 'numeric' };
+  const hoursInTimeZone = parseInt(currentDate.toLocaleTimeString('ru-RU', timeOptions));
   const currentMinute = currentDate.getMinutes();
-  let neededHour = currentHour + 1;
+
+  let neededHour = hoursInTimeZone + 1;
   if (currentMinute >= 30) {
-    neededHour = currentHour + 2;
+    neededHour = hoursInTimeZone + 2;
   }
 
   const time = data.hourly.time[neededHour];
@@ -257,7 +261,7 @@ function showOneHourWeather(cardId, data) {
   const weatherCode = data.hourly.weather_code[neededHour];
   const precipitation = getWeatherCondition(weatherCode);
 
-  document.getElementById("one-hour-time" + cardId).innerHTML = "Через час, в " + time + ":";
+  document.getElementById("one-hour-time" + cardId).innerHTML = "Через час, в " + time + "(" + timeZone + ")" + ":";
   document.getElementById("one-hour-temp" + cardId).innerHTML = temperature + "&deg;C";
   document.getElementById("one-hour-precipitation" + cardId).innerHTML = precipitation;
   document.getElementById("one-hour-apparent-temp" + cardId).innerHTML = feelsLikeTemperature + "&deg;C";
@@ -267,6 +271,7 @@ function showOneHourWeather(cardId, data) {
 }
 
 function showTomorrowWeather(cardId, data) {
+  const timeZone = data.timezone;
   const time = data.daily.time[1];
   const minTemperature = data.daily.temperature_2m_min[1];
   const maxTemperature = data.daily.temperature_2m_max[1];
@@ -276,7 +281,7 @@ function showTomorrowWeather(cardId, data) {
   const weatherCode = data.daily.weather_code[1];
   const precipitation = getWeatherCondition(weatherCode);
 
-  document.getElementById("tomorrow-time" + cardId).innerHTML = "Завтра, " + time + ":";
+  document.getElementById("tomorrow-time" + cardId).innerHTML = "Завтра, " + time + "(" + timeZone + ")" + ":";
   document.getElementById("tomorrow-min-temp" + cardId).innerHTML = minTemperature + "&deg;C";
   document.getElementById("tomorrow-max-temp" + cardId).innerHTML = maxTemperature + "&deg;C";
   document.getElementById("tomorrow-precipitation" + cardId).innerHTML = precipitation;
