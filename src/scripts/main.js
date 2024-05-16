@@ -291,7 +291,15 @@ function showTomorrowWeather(cardId, data) {
   const windDegree = data.daily.wind_direction_10m_dominant[1];
   const windGusts = data.daily.wind_gusts_10m_max[1];
   const weatherCode = data.daily.weather_code[1];
-  const precipitation = getWeatherCondition(weatherCode);
+
+  let precipitation = getWeatherCondition(weatherCode);
+  const precipitationSum = data.daily.precipitation_sum[1];
+  const precipitationHours = data.daily.precipitation_hours[1];
+  const precipitationSumUnits = data.daily_units.precipitation_sum;
+
+  if (precipitation !== "--") {
+    precipitation = precipitation + "<br>" + precipitationSum + precipitationSumUnits + " / " + precipitationHours + "ч";
+  }
 
   const timeOffsetHours = data.utc_offset_seconds / 3600;
   let utcZoneString = "UTC+" + timeOffsetHours;
