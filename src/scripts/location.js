@@ -29,3 +29,5 @@ function getCoordinates(location) {
     request.send();
   });
 }
+
+export { getCoordinates };

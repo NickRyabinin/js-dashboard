@@ -8,3 +8,5 @@ function validateInput(inputValue) {
   }
   return true;
 }
+
+export { validateInput };

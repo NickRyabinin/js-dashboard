@@ -154,3 +154,5 @@ function showTomorrowWeather(cardId, data) {
   drawWindDirection("tomorrow-wind-direction" + cardId, windDegree);
   document.getElementById("tomorrow-wind-gusts" + cardId).innerHTML = windGusts + "м/с";
 }
+
+export { showMessage, drawWindDirection, showCurrentWeather, showOneHourWeather, showTomorrowWeather };

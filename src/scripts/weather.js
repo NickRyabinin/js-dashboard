@@ -105,3 +105,5 @@ function getWeatherCondition(weatherCode) {
 
   return condition;
 }
+
+export { getWeatherWithAJAX, getWeatherWithFetch, fetchDataWithXHR, fetchDataWithFetch, getWeatherCondition };
