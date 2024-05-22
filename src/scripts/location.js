@@ -1,3 +1,5 @@
+import { showMessage } from "./view.js";
+
 function getCoordinates(location) {
   return new Promise((resolve, reject) => {
     const geocodingApiUrl = 'https://nominatim.openstreetmap.org/search';

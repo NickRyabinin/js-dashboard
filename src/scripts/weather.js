@@ -1,3 +1,7 @@
+import { validateInput } from "./validator.js";
+import { getCoordinates } from "./location.js";
+import { showMessage, showCurrentWeather, showOneHourWeather, showTomorrowWeather } from "./view.js";
+
 function getWeatherWithAJAX() {
   const location = document.getElementById("location-ajax").value;
   if (validateInput(location)) {

@@ -1,3 +1,5 @@
+import { getWeatherCondition } from "./weather.js";
+
 function showMessage(message) {
   document.getElementById("error").innerHTML = message;
 }

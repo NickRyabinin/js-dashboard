@@ -1,3 +1,5 @@
+import { showMessage } from "./view.js";
+
 function validateInput(inputValue) {
   if (inputValue.trim() === '') {
       showMessage('Поле не должно быть пустым');

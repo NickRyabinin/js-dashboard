@@ -10,13 +10,12 @@
     <title>JS dashboard</title>
   </head>
   <body class="bg-dark">
-    <script type="module" src="./scripts/main.js"></script>
     <div id="error" class="error"></div>
     <div class="container">
         <div class="card bg-blue">
-          <form id="form-ajax" onsubmit="return false">
-            <input id="location-ajax" class="input" type="search" placeholder="Введите нужное местоположение" onkeyup="getWeather(event)">
-            <input class="submit" type="button" onclick="getWeather(event)" value="Получить погоду">
+          <form id="form-ajax">
+            <input id="location-ajax" class="input" type="search" placeholder="Введите нужное местоположение">
+            <input class="submit" type="button" value="Получить погоду">
           </form>
           <div id="location1" class="location">Местоположение не определено</div>
           <hr>
@@ -102,9 +101,9 @@
           </div>
         </div>
         <div class="card bg-blue">
-          <form id="form-fetch" onsubmit="return false">
-            <input id="location-fetch" class="input" type="search" placeholder="Введите нужное местоположение" onkeyup="getWeather(event)">
-            <input class="submit" type="button" onclick="getWeather(event)" value="Получить погоду">
+          <form id="form-fetch">
+            <input id="location-fetch" class="input" type="search" placeholder="Введите нужное местоположение">
+            <input class="submit" type="button" value="Получить погоду">
           </form>
           <div id="location2" class="location">Местоположение не определено</div>
           <hr>
@@ -190,5 +189,6 @@
           </div>
         </div>
     </div>
+    <script type="module" src="./scripts/main.js"></script>
   </body>
 </html>
