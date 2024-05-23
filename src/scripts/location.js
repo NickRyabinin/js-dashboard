@@ -11,6 +11,7 @@ function getCoordinates(location) {
         const data = JSON.parse(request.responseText);
         if (Object.keys(data).length === 0) {
           reject('Местоположение не может быть определено');
+          return;
         }
         showMessage('');
         const locationData = {
