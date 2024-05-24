@@ -3,30 +3,19 @@ import { getWeatherWithAJAX, getWeatherWithFetch } from "./weather.js";
 document.addEventListener('DOMContentLoaded', setEventListeners);
 
 function setEventListeners() {
-  const formAjax = document.getElementById('form-ajax');
-  const formFetch = document.getElementById('form-fetch');
+  const forms = document.querySelectorAll('form');
 
-  formAjax.addEventListener('submit', function (event) {
-    event.preventDefault();
-    getWeather(event);
-  });
-
-  formAjax.addEventListener('click', function (event) {
-    if (event.target.classList.contains('submit')) {
+  for (const form of forms) {
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
       getWeather(event);
-    }
-  });
-
-  formFetch.addEventListener('submit', function (event) {
-    event.preventDefault();
-    getWeather(event);
-  });
-
-  formFetch.addEventListener('click', function (event) {
-    if (event.target.classList.contains('submit')) {
-      getWeather(event);
-    }
-  });
+    });
+    form.addEventListener('click', function (event) {
+      if (event.target.classList.contains('submit')) {
+        getWeather(event);
+      }
+    });
+  }
 }
 
 function getWeather(event) {

@@ -20,14 +20,12 @@ function getCoordinates(location) {
           locationName: data[0].display_name
         };
         resolve(locationData);
-      } else if (request.status <= 500) {
-        reject('Error while geocoding');
       } else {
-        reject('Server error');
+        reject('Что-то пошло не так ...');
       }
     };
     request.onerror = function() {
-      reject('Unable to connect to server');
+      reject('Не могу подключиться к сервису геокодирования');
     };
     request.send();
   });

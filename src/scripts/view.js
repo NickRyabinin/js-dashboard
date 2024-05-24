@@ -68,11 +68,7 @@ function showCurrentWeather(cardId, data) {
   const weatherCode = data.current.weather_code;
   const precipitation = getWeatherCondition(weatherCode);
 
-  const timeOffsetHours = data.utc_offset_seconds / 3600;
-  let utcZoneString = "UTC+" + timeOffsetHours;
-  if (timeOffsetHours < 0) {
-    utcZoneString = "UTC" + timeOffsetHours;
-  }
+  const utcZoneString = getUtcZoneString(data);
 
   document.getElementById("time" + cardId).innerHTML = "По состоянию на " + time + "(" + utcZoneString + ")" + ":";
   document.getElementById("current-temp" + cardId).innerHTML = temperature + "&deg;C";
@@ -95,11 +91,7 @@ function showOneHourWeather(cardId, data) {
     neededHour = hoursInTimeZone + 2;
   }
 
-  const timeOffsetHours = data.utc_offset_seconds / 3600;
-  let utcZoneString = "UTC+" + timeOffsetHours;
-  if (timeOffsetHours < 0) {
-    utcZoneString = "UTC" + timeOffsetHours;
-  }
+  const utcZoneString = getUtcZoneString(data);
 
   const time = data.hourly.time[neededHour];
   const temperature = data.hourly.temperature_2m[neededHour];
@@ -142,11 +134,7 @@ function showTomorrowWeather(cardId, data) {
     precipitation = precipitation + "<br>" + precipitationSum + "мм WE" + " / " + precipitationHours + "ч";
   }
 
-  const timeOffsetHours = data.utc_offset_seconds / 3600;
-  let utcZoneString = "UTC+" + timeOffsetHours;
-  if (timeOffsetHours < 0) {
-    utcZoneString = "UTC" + timeOffsetHours;
-  }
+  const utcZoneString = getUtcZoneString(data);
 
   document.getElementById("tomorrow-time" + cardId).innerHTML = "Завтра, " + time + "(" + utcZoneString + ")" + ":";
   document.getElementById("tomorrow-min-temp" + cardId).innerHTML = minTemperature + "&deg;C";
@@ -155,6 +143,15 @@ function showTomorrowWeather(cardId, data) {
   document.getElementById("tomorrow-wind-speed" + cardId).innerHTML = windSpeed + "м/с";
   drawWindDirection("tomorrow-wind-direction" + cardId, windDegree);
   document.getElementById("tomorrow-wind-gusts" + cardId).innerHTML = windGusts + "м/с";
+}
+
+function getUtcZoneString(data) {
+  const timeOffsetHours = data.utc_offset_seconds / 3600;
+  let utcZoneString = "UTC+" + timeOffsetHours;
+  if (timeOffsetHours < 0) {
+    utcZoneString = "UTC" + timeOffsetHours;
+  }
+  return utcZoneString;
 }
 
 export { showMessage, drawWindDirection, showCurrentWeather, showOneHourWeather, showTomorrowWeather };
