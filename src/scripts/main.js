@@ -1,4 +1,4 @@
-import { getWeatherWithAJAX, getWeatherWithFetch } from "./weather.js";
+import { getWeather } from "./weather.js";
 
 document.addEventListener('DOMContentLoaded', setEventListeners);
 
@@ -8,21 +8,21 @@ function setEventListeners() {
   for (const form of forms) {
     form.addEventListener('submit', function (event) {
       event.preventDefault();
-      getWeather(event);
+      main(event);
     });
     form.addEventListener('click', function (event) {
       if (event.target.classList.contains('submit')) {
-        getWeather(event);
+        main(event);
       }
     });
   }
 }
 
-function getWeather(event) {
+function main(event) {
   const formId = event.target.closest('form').id;
   if (formId === "form-ajax") {
-    getWeatherWithAJAX();
+    getWeather("ajax");
   } else if (formId === "form-fetch") {
-    getWeatherWithFetch();
+    getWeather("fetch");
   }
 }

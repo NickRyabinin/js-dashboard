@@ -2,43 +2,34 @@ import { validateInput } from "./validator.js";
 import { getCoordinates } from "./location.js";
 import { showMessage, showCurrentWeather, showOneHourWeather, showTomorrowWeather } from "./view.js";
 
-function getWeatherWithAJAX() {
-  const location = document.getElementById("location-ajax").value;
+function getWeather(method) {
+  const location = document.getElementById("location-" + method).value;
   if (validateInput(location)) {
     getCoordinates(location)
       .then(locationData => {
-        document.getElementById("location1").innerHTML = locationData.locationName;
-        fetchDataWithXHR(locationData)
-          .then(weatherData => {
-            showCurrentWeather(1, weatherData);
-            showOneHourWeather(1, weatherData);
-            showTomorrowWeather(1, weatherData);
-          })
-          .catch(error => {
-            showMessage(error);
-          });
-      })
-      .catch(error => {
-        showMessage(error);
-      });
-  }
-}
-
-function getWeatherWithFetch() {
-  const location = document.getElementById("location-fetch").value;
-  if (validateInput(location)) {
-    getCoordinates(location)
-      .then(locationData => {
-        document.getElementById("location2").innerHTML = locationData.locationName;
-        fetchDataWithFetch(locationData)
-          .then(weatherData => {
-            showCurrentWeather(2, weatherData);
-            showOneHourWeather(2, weatherData);
-            showTomorrowWeather(2, weatherData);
-          })
-          .catch(error => {
-            showMessage(error);
-          });
+        if (method === "ajax") {
+          document.getElementById("location1").innerHTML = locationData.locationName;
+          fetchDataWithXHR(locationData)
+            .then(weatherData => {
+              showCurrentWeather(1, weatherData);
+              showOneHourWeather(1, weatherData);
+              showTomorrowWeather(1, weatherData);
+            })
+            .catch(error => {
+              showMessage(error);
+            });
+        } else if (method === "fetch") {
+          document.getElementById("location2").innerHTML = locationData.locationName;
+          fetchDataWithFetch(locationData)
+            .then(weatherData => {
+              showCurrentWeather(2, weatherData);
+              showOneHourWeather(2, weatherData);
+              showTomorrowWeather(2, weatherData);
+            })
+            .catch(error => {
+              showMessage(error);
+            });
+        }
       })
       .catch(error => {
         showMessage(error);
@@ -110,4 +101,4 @@ function getWeatherCondition(weatherCode) {
   return condition;
 }
 
-export { getWeatherWithAJAX, getWeatherWithFetch, fetchDataWithXHR, fetchDataWithFetch, getWeatherCondition };
+export { getWeather, fetchDataWithXHR, fetchDataWithFetch, getWeatherCondition };
