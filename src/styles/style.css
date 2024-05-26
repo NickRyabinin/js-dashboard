@@ -27,7 +27,7 @@
 
 body {
   margin: 0;
-  padding: 0;
+  padding: 0 10px;
 
   font-family: "Open Sans", sans-serif;
   font-size: var(--font-normal);

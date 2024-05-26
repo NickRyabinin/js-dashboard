@@ -1,35 +1,29 @@
 import { validateInput } from "./validator.js";
 import { getCoordinates } from "./location.js";
-import { showMessage, showCurrentWeather, showOneHourWeather, showTomorrowWeather } from "./view.js";
+import { showMessage, displayWeather, displayLocation } from "./view.js";
 
 function getWeather(method) {
   const location = document.getElementById("location-" + method).value;
+  let cardId;
+  let callbackFunc;
   if (validateInput(location)) {
     getCoordinates(location)
       .then(locationData => {
         if (method === "ajax") {
-          document.getElementById("location1").innerHTML = locationData.locationName;
-          fetchDataWithXHR(locationData)
-            .then(weatherData => {
-              showCurrentWeather(1, weatherData);
-              showOneHourWeather(1, weatherData);
-              showTomorrowWeather(1, weatherData);
-            })
-            .catch(error => {
-              showMessage(error);
-            });
+          cardId = 1;
+          callbackFunc = fetchDataWithXHR;
         } else if (method === "fetch") {
-          document.getElementById("location2").innerHTML = locationData.locationName;
-          fetchDataWithFetch(locationData)
-            .then(weatherData => {
-              showCurrentWeather(2, weatherData);
-              showOneHourWeather(2, weatherData);
-              showTomorrowWeather(2, weatherData);
-            })
-            .catch(error => {
-              showMessage(error);
-            });
+          cardId = 2;
+          callbackFunc = fetchDataWithFetch;
         }
+        displayLocation(cardId, locationData.locationName);
+        callbackFunc(locationData)
+          .then(weatherData => {
+            displayWeather(cardId, weatherData);
+          })
+          .catch(error => {
+            showMessage(error);
+          });
       })
       .catch(error => {
         showMessage(error);
@@ -56,7 +50,7 @@ function fetchDataWithXHR(locationData) {
         const weatherData = JSON.parse(xhr.responseText);
         resolve(weatherData);
       } else {
-        reject("Произошла ошибка при получении данных");
+        reject("Произошла ошибка при получении данных погоды");
       }
     };
     xhr.send();
@@ -76,7 +70,7 @@ async function fetchDataWithFetch(locationData) {
 
   const response = await fetch(weatherApiUrl);
   if (!response.ok) {
-    throw new Error("Произошла ошибка при получении данных");
+    throw new Error("Произошла ошибка при получении данных погоды");
   }
   const weatherData = await response.json();
   return weatherData;
@@ -101,4 +95,4 @@ function getWeatherCondition(weatherCode) {
   return condition;
 }
 
-export { getWeather, fetchDataWithXHR, fetchDataWithFetch, getWeatherCondition };
+export { getWeather, getWeatherCondition };

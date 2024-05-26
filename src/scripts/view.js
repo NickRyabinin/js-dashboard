@@ -57,6 +57,16 @@ function drawWindDirection(elementId, degrees) {
   ctx.translate(-centerX, -centerY);
 }
 
+function displayWeather(cardId, weatherData) {
+  showCurrentWeather(cardId, weatherData);
+  showOneHourWeather(cardId, weatherData);
+  showTomorrowWeather(cardId, weatherData);
+}
+
+function displayLocation(cardId, locationName) {
+  document.getElementById("location" + cardId).innerHTML = locationName;
+}
+
 function showCurrentWeather(cardId, data) {
   const timeZone = data.timezone;
   const time = data.current.time;
@@ -154,4 +164,4 @@ function getUtcZoneString(data) {
   return utcZoneString;
 }
 
-export { showMessage, drawWindDirection, showCurrentWeather, showOneHourWeather, showTomorrowWeather };
+export { showMessage, drawWindDirection, displayWeather, displayLocation };
