@@ -5,7 +5,7 @@ function showMessage(message) {
 }
 
 function drawWindDirection(elementId, degrees) {
-  createCanvas(elementId);
+  const canvas = createCanvas(elementId);
 
   const ctx = canvas.getContext('2d');
   const centerX = canvas.width / 2;
@@ -59,6 +59,8 @@ function createCanvas(elementId) {
     canvas.height = 64;
     windDirectionDiv.appendChild(canvas);
   }
+
+  return canvas;
 }
 
 function displayWeather(cardId, weatherData) {
