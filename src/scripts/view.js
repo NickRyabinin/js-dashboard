@@ -5,15 +5,7 @@ function showMessage(message) {
 }
 
 function drawWindDirection(elementId, degrees) {
-  const windDirectionDiv = document.getElementById(elementId);
-  let canvas = windDirectionDiv.querySelector('canvas');
-
-  if (!canvas) {
-    canvas = document.createElement('canvas');
-    canvas.width = 64;
-    canvas.height = 64;
-    windDirectionDiv.appendChild(canvas);
-  }
+  createCanvas(elementId);
 
   const ctx = canvas.getContext('2d');
   const centerX = canvas.width / 2;
@@ -57,6 +49,18 @@ function drawWindDirection(elementId, degrees) {
   ctx.translate(-centerX, -centerY);
 }
 
+function createCanvas(elementId) {
+  const windDirectionDiv = document.getElementById(elementId);
+  let canvas = windDirectionDiv.querySelector('canvas');
+
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+    canvas.width = 64;
+    canvas.height = 64;
+    windDirectionDiv.appendChild(canvas);
+  }
+}
+
 function displayWeather(cardId, weatherData) {
   showCurrentWeather(cardId, weatherData);
   showOneHourWeather(cardId, weatherData);
@@ -68,7 +72,6 @@ function displayLocation(cardId, locationName) {
 }
 
 function showCurrentWeather(cardId, data) {
-  const timeZone = data.timezone;
   const time = data.current.time;
   const temperature = data.current.temperature_2m;
   const feelsLikeTemperature = data.current.apparent_temperature;
@@ -90,18 +93,8 @@ function showCurrentWeather(cardId, data) {
 }
 
 function showOneHourWeather(cardId, data) {
-  const timeZone = data.timezone;
-  const currentDate = new Date();
-  const timeOptions = { timeZone: timeZone, hour12: false, hour: 'numeric' };
-  const hoursInTimeZone = parseInt(currentDate.toLocaleTimeString('ru-RU', timeOptions));
-  const currentMinute = currentDate.getMinutes();
-
-  let neededHour = hoursInTimeZone + 1;
-  if (currentMinute >= 30) {
-    neededHour = hoursInTimeZone + 2;
-  }
-
   const utcZoneString = getUtcZoneString(data);
+  const neededHour = getNeededHour(data);
 
   const time = data.hourly.time[neededHour];
   const temperature = data.hourly.temperature_2m[neededHour];
@@ -157,11 +150,28 @@ function showTomorrowWeather(cardId, data) {
 
 function getUtcZoneString(data) {
   const timeOffsetHours = data.utc_offset_seconds / 3600;
+
   let utcZoneString = "UTC+" + timeOffsetHours;
   if (timeOffsetHours < 0) {
     utcZoneString = "UTC" + timeOffsetHours;
   }
+
   return utcZoneString;
+}
+
+function getNeededHour(data) {
+  const timeZone = data.timezone;
+  const currentDate = new Date();
+  const timeOptions = { timeZone: timeZone, hour12: false, hour: 'numeric' };
+  const hoursInTimeZone = parseInt(currentDate.toLocaleTimeString('ru-RU', timeOptions));
+  const currentMinute = currentDate.getMinutes();
+
+  let neededHour = hoursInTimeZone + 1;
+  if (currentMinute >= 30) {
+    neededHour = hoursInTimeZone + 2;
+  }
+
+  return neededHour;
 }
 
 export { showMessage, drawWindDirection, displayWeather, displayLocation };

@@ -4,15 +4,12 @@ import { showMessage, displayWeather, displayLocation } from "./view.js";
 
 function getWeather(method) {
   const location = document.getElementById("location-" + method).value;
-  let cardId;
-  let callbackFunc;
   if (validateInput(location)) {
     getCoordinates(location)
       .then(locationData => {
-        if (method === "ajax") {
-          cardId = 1;
-          callbackFunc = fetchDataWithXHR;
-        } else if (method === "fetch") {
+          let cardId = 1;
+          let callbackFunc = fetchDataWithXHR;
+        if (method === "fetch") {
           cardId = 2;
           callbackFunc = fetchDataWithFetch;
         }
