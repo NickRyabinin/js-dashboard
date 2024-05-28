@@ -11,38 +11,18 @@ function drawWindDirection(elementId, degrees) {
   const centerX = canvas.width / 2;
   const centerY = canvas.height / 2;
   const circleRadius = 16;
-  const triangleHeight = 10;
-  const triangleBase = 8;
-  const triangleTipOffset = 4;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   // Рисуем окружность
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, circleRadius, 0, 2 * Math.PI);
-  ctx.stroke();
+  drawCircle(ctx, centerX, centerY, circleRadius);
   // Рисуем буквы
-  ctx.font = '10px Arial'; // Уменьшаем размер шрифта
-  ctx.fillText('N', centerX - 4, centerY - circleRadius + 10);
-  ctx.fillText('E', centerX + circleRadius - 9, centerY + 4);
-  ctx.fillText('S', centerX - 3, centerY + circleRadius - 3);
-  ctx.fillText('W', centerX - circleRadius + 2, centerY + 4);
-  // Рассчитываем координаты вершин треугольника
-  const tipX = centerX;
-  const tipY = centerY - circleRadius - triangleTipOffset; // Внешняя сторона
-  const leftX = centerX - triangleBase / 2;
-  const leftY = centerY - circleRadius - triangleHeight - triangleTipOffset;
-  const rightX = centerX + triangleBase / 2;
-  const rightY = centerY - circleRadius - triangleHeight - triangleTipOffset;
+  drawTextInsideCircle(ctx, centerX, centerY, circleRadius);
   // Поворачиваем контекст на указанный угол
   ctx.translate(centerX, centerY);
   ctx.rotate(degrees * Math.PI / 180);
   ctx.translate(-centerX, -centerY);
-  // Рисуем треугольник
-  ctx.beginPath();
-  ctx.moveTo(tipX, tipY);
-  ctx.lineTo(leftX, leftY);
-  ctx.lineTo(rightX, rightY);
-  ctx.closePath();
-  ctx.fill();
+  // Рисуем указатель направления ветра
+  drawDirectionPointer(ctx, centerX, centerY, circleRadius);
   // Возвращаем контекст в исходное положение
   ctx.translate(centerX, centerY);
   ctx.rotate(-degrees * Math.PI / 180);
@@ -61,6 +41,41 @@ function createCanvas(elementId) {
   }
 
   return canvas;
+}
+
+function drawCircle(ctx, centerX, centerY, circleRadius) {
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, circleRadius, 0, 2 * Math.PI);
+  ctx.stroke();
+}
+
+function drawTextInsideCircle(ctx, centerX, centerY, circleRadius) {
+  ctx.font = '10px Arial';
+  ctx.fillText('N', centerX - 4, centerY - circleRadius + 10);
+  ctx.fillText('E', centerX + circleRadius - 9, centerY + 4);
+  ctx.fillText('S', centerX - 3, centerY + circleRadius - 3);
+  ctx.fillText('W', centerX - circleRadius + 2, centerY + 4);
+}
+
+function drawDirectionPointer(ctx, centerX, centerY, circleRadius) {
+  const triangleHeight = 10;
+  const triangleBase = 8;
+  const triangleTipOffset = 4;
+
+  // Рассчитываем координаты вершин треугольника
+  const tipX = centerX;
+  const tipY = centerY - circleRadius - triangleTipOffset; // Внешняя сторона
+  const leftX = centerX - triangleBase / 2;
+  const leftY = centerY - circleRadius - triangleHeight - triangleTipOffset;
+  const rightX = centerX + triangleBase / 2;
+  const rightY = centerY - circleRadius - triangleHeight - triangleTipOffset;
+  // Рисуем треугольник
+  ctx.beginPath();
+  ctx.moveTo(tipX, tipY);
+  ctx.lineTo(leftX, leftY);
+  ctx.lineTo(rightX, rightY);
+  ctx.closePath();
+  ctx.fill();
 }
 
 function displayWeather(cardId, weatherData) {
