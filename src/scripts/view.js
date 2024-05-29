@@ -100,13 +100,13 @@ function showCurrentWeather(cardId, data) {
 
   const utcZoneString = getUtcZoneString(data);
 
-  document.getElementById("time" + cardId).innerHTML = "По состоянию на " + time + "(" + utcZoneString + ")" + ":";
+  document.getElementById("current-time" + cardId).innerHTML = "По состоянию на " + time + "(" + utcZoneString + ")" + ":";
   document.getElementById("current-temp" + cardId).innerHTML = temperature + "&deg;C";
-  document.getElementById("precipitation" + cardId).innerHTML = precipitation;
-  document.getElementById("apparent-temp" + cardId).innerHTML = feelsLikeTemperature + "&deg;C";
-  document.getElementById("wind-speed" + cardId).innerHTML = windSpeed + "м/с";
+  document.getElementById("current-precipitation" + cardId).innerHTML = precipitation;
+  document.getElementById("current-apparent-temp" + cardId).innerHTML = feelsLikeTemperature + "&deg;C";
+  document.getElementById("current-wind-speed" + cardId).innerHTML = windSpeed + "м/с";
   drawWindDirection("current-wind-direction" + cardId, windDegree);
-  document.getElementById("wind-gusts" + cardId).innerHTML = windGusts + "м/с";
+  document.getElementById("current-wind-gusts" + cardId).innerHTML = windGusts + "м/с";
 }
 
 function showOneHourWeather(cardId, data) {

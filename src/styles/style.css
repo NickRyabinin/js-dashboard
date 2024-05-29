@@ -127,3 +127,7 @@ form {
   margin: 10px;
   height: 15px;
 }
+
+.label {
+  color: rgb(71, 67, 65);
+}
