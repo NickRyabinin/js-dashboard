@@ -78,15 +78,22 @@ function getWeatherCondition(weatherCode) {
   const rain = [61, 63, 65, 66, 67];
   const showers = [80, 81, 82];
   const snow = [71, 73, 75, 77, 85, 86];
+  const thunderstorm = [95, 96, 99];
 
   if (rain.includes(weatherCode)) {
     condition = "Дождь";
   }
+
   if (showers.includes(weatherCode)) {
     condition = "Ливень";
   }
+
   if (snow.includes(weatherCode)) {
     condition = "Снег"
+  }
+
+  if (thunderstorm.includes(weatherCode)) {
+    condition = "Гроза"
   }
 
   return condition;
