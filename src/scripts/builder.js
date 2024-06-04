@@ -22,21 +22,11 @@ function createWeatherCard(cardId, method) {
   const location = buildElement('div', `location${cardId}`, ['location'], "Местоположение не определено");
   card.appendChild(location);
 
-  // hr
-  const hr = document.createElement('hr');
-  card.appendChild(hr);
-
   // current block
   buildBlock(card, cardId, 'current');
 
-  // hr
-  card.appendChild(hr);
-  
   // one-hour block
   buildBlock(card, cardId, 'one-hour');
-  
-  // hr
-  card.appendChild(hr);
 
   // tomorrow block
   buildBlock(card, cardId, 'tomorrow');
@@ -65,20 +55,31 @@ function buildElement(tag, id = '', classList = [], innerHTML = '') {
 }
 
 function buildBlock(card, cardId, blockId) {
+  // hr
+  const hr = document.createElement('hr');
+  card.appendChild(hr);
+
   // time
   const time = buildElement('div', `${blockId}-time${cardId}`, ['time']);
   card.appendChild(time);
 
   // temp & precipitation
-  const weatherParametersContainer1 = buildElement(tag='div', classList=['weather-parameters-container']);
+  const weatherParametersContainer1 = buildElement('div', '', ['weather-parameters-container']);
 
-  const superstructure1 = buildElement(tag='div', classList=['superstructure']);
+  const superstructure1 = buildElement('div', '', ['superstructure']);
 
   let label1 = buildElement('div', '', ['label'], "Температура");
   let temp = buildElement('div', `${blockId}-temp${cardId}`, ['temperature']);
+
+  let label3 = buildElement('div', '', ['label'], "Ощущается как");
+  let apparentTemp = buildElement('div', `${blockId}-apparent-temp${cardId}`, ['temperature']);
+
   if (blockId === 'tomorrow') {
     label1 = buildElement('div', '', ['label'], "Температура, min");
     temp = buildElement('div', `${blockId}-min-temp${cardId}`, ['temperature']);
+
+    label3 = buildElement('div', '', ['label'], "Температура, max");
+    apparentTemp = buildElement('div', `${blockId}-max-temp${cardId}`, ['temperature']);
   }
 
   superstructure1.appendChild(label1);
@@ -86,7 +87,7 @@ function buildBlock(card, cardId, blockId) {
 
   weatherParametersContainer1.appendChild(superstructure1);
 
-  const superstructure2 = buildElement(tag='div', classList=['superstructure']);
+  const superstructure2 = buildElement('div', '', ['superstructure']);
 
   const label2 = buildElement('div', '', ['label'], "Осадки");
   superstructure2.appendChild(label2);
@@ -96,14 +97,7 @@ function buildBlock(card, cardId, blockId) {
 
   weatherParametersContainer1.appendChild(superstructure2);
 
-  const superstructure3 = buildElement(tag='div', classList=['superstructure']);
-
-  let label3 = buildElement('div', '', ['label'], "Ощущается как");
-  let apparentTemp = buildElement('div', `${blockId}-apparent-temp${cardId}`, ['temperature']);
-  if (blockId === 'tomorrow') {
-    label3 = buildElement('div', '', ['label'], "Температура, max");
-    apparentTemp = buildElement('div', `${blockId}-max-temp${cardId}`, ['temperature']);
-  }
+  const superstructure3 = buildElement('div', '', ['superstructure']);
 
   superstructure3.appendChild(label3);
   superstructure3.appendChild(apparentTemp);
@@ -113,9 +107,9 @@ function buildBlock(card, cardId, blockId) {
   card.appendChild(weatherParametersContainer1);
 
   // wind
-  const weatherParametersContainer2 = buildElement(tag='div', classList=['weather-parameters-container']);
+  const weatherParametersContainer2 = buildElement('div', '', ['weather-parameters-container']);
 
-  const superstructure4 = buildElement(tag='div', classList=['superstructure']);
+  const superstructure4 = buildElement('div', '', ['superstructure']);
 
   const label4 = buildElement('div', '', ['label'], "Ветер");
   superstructure4.appendChild(label4);
@@ -129,7 +123,7 @@ function buildBlock(card, cardId, blockId) {
 
   weatherParametersContainer2.appendChild(windDirection);
 
-  const superstructure6 = buildElement(tag='div', classList=['superstructure']);
+  const superstructure6 = buildElement('div', '', ['superstructure']);
 
   const label6 = buildElement('div', '', ['label'], "Порывы");
   superstructure6.appendChild(label6);

@@ -1,9 +1,9 @@
-// import { createWeatherCard } from "./builder.js";
+import { createWeatherCard } from "./builder.js";
 import { getWeather } from "./weather.js";
 
-/* const container = document.querySelector('.container');
+const container = document.querySelector('.container');
 container.appendChild(createWeatherCard(1, 'ajax'));
-container.appendChild(createWeatherCard(2, 'fetch')); */
+container.appendChild(createWeatherCard(2, 'fetch'));
 
 document.addEventListener('DOMContentLoaded', setEventListeners);
 
