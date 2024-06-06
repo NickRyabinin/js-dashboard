@@ -1,6 +1,7 @@
 :root {
   --font-large: 28px;
   --font-normal: 14px;
+  --font-small: 10px;
 }
 
 @font-face {
@@ -37,7 +38,7 @@ body {
 .error {
   color: rgb(209, 128, 104);
   text-align: center;
-  padding: 15px;
+  padding: 5px;
   position: fixed;
   top: 0;
   left: 50%;
@@ -51,7 +52,7 @@ body {
   gap: 100px;
   flex-wrap: wrap;
   height: 100%;
-  margin: 7vh 0;
+  margin: 4vh 0;
   padding: 0 10px;
 }
 
@@ -130,4 +131,15 @@ form {
 
 .label {
   color: rgb(71, 67, 65);
+}
+
+footer {
+  text-align: center;
+  font-size: var(--font-small);
+  margin-bottom: 10px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
 }
