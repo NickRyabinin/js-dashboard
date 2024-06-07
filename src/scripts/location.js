@@ -1,3 +1,7 @@
+/**
+ * location.js отправляет запрос к сервису геокодирования https://nominatim.openstreetmap.org/
+ * Полученный ответ в виде объекта, содержащего широту, долготу и название локации передаётся в weather.js
+ */
 import { showMessage } from "./view.js";
 
 function getCoordinates(location) {

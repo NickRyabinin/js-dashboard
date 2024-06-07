@@ -1,3 +1,6 @@
+/**
+ * validator.js валидирует пользовательский ввод на пустоту и недопустимые символы
+ */
 import { showMessage } from "./view.js";
 
 function validateInput(inputValue) {

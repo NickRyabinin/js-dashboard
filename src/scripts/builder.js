@@ -1,3 +1,6 @@
+/**
+ * builder.js динамически генерирует единообразные погодные карточки, используя DOM
+ */
 function createWeatherCard(cardId, method) {
   const card = buildElement('div', '', ['card', 'bg-blue']);
 

@@ -1,3 +1,6 @@
+/**
+ * view.js отображает пользователю ранее обработанные результаты запроса
+ */
 import { getWeatherCondition } from "./weather.js";
 
 function showMessage(message) {

@@ -1,3 +1,8 @@
+/**
+ * weather.js передаёт введённую пользователем локацию в location.js, получает оттуда геокодирование.
+ * Затем полученные координаты используются в запросе к API погоды open-meteo.com.
+ * Ответ с погодными данными выводится пользователю через view.js
+ */
 import { validateInput } from "./validator.js";
 import { getCoordinates } from "./location.js";
 import { showMessage, displayWeather, displayLocation } from "./view.js";
